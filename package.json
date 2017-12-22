@@ -25,6 +25,7 @@
     "mongoose": "^4.13.7",
     "nodemailer": "^4.4.1",
     "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "request": "^2.83.0"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@types/node": "^8.5.2",
     "@types/nodemailer": "^4.3.1",
     "@types/passport": "^0.4.2",
+    "@types/passport-local": "^1.0.32",
     "@types/supertest": "^2.0.4",
     "jasmine": "^2.8.0",
     "nodemon": "^1.14.2",
