@@ -1,0 +1,5 @@
+{
+	"undefined": "localhost/blog",
+	"development": "localhost/blog",
+	"test": "localhost/blog-test"
+}

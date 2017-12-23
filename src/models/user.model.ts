@@ -8,4 +8,6 @@ const userSchema = new mongoose.Schema({
 
 // add encrypting and compare password functions below
 
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export default User;
