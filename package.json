@@ -42,6 +42,7 @@
     "@types/nodemailer": "^4.3.1",
     "@types/passport": "^0.4.2",
     "@types/passport-local": "^1.0.32",
+    "@types/request": "^2.0.9",
     "@types/supertest": "^2.0.4",
     "jasmine": "^2.8.0",
     "nodemon": "^1.14.2",

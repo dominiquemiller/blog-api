@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import * as mongoose from "mongoose";
 import * as passport from "passport";
 import * as cors from "cors";
+import { routes } from "./routes";
 
 // Attach .env variables to process.env
 dotenv.config();
@@ -35,6 +36,9 @@ app.use(function (req, res, next) {
   res.header("Content-Type", "application/json");
   next();
 });
+
+// initialize the routes
+routes(app);
 
 app.listen(port, () => {
   console.log(`Started server on port: ${port}`);
