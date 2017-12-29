@@ -1,17 +1,14 @@
 [
   {
    "title": "my test post",
-   "author": 12345678,
    "body": "test post body" 
   },
   {
    "title": "my second post",
-   "author": 12345678,
    "body": "test post body" 
   },
   {
    "title": "my third post",
-   "author": 12345678,
    "body": "test post body" 
   }
 ]
