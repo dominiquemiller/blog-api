@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // add encrypting and compare password functions below
-
 const User = mongoose.model("User", userSchema);
 
 export default User;
+
