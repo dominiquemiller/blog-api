@@ -8,6 +8,7 @@ export class CommentService {
   body: string;
   email: string;
   commentId: mongoose.Schema.Types.ObjectId;
+  validPost: boolean;
 
   constructor( comment: CommentModel ) {
     this.postId = comment.post_id;
@@ -16,8 +17,9 @@ export class CommentService {
   }
 
   createComment() {
-
     new Promise( async (res, rej ) => {
+      if (this.validPost) rej("Post id not valid");
+
       const comment = await Comment.create( { body: this.body, email: this.email },
         (err: any, doc: mongoose.Document ) => {
           console.log("createComment", err, doc);
@@ -45,6 +47,13 @@ export class CommentService {
                       res(success);
                     } );
 
+    });
+  }
+
+  private validPostId() {
+    Post.findById(this.postId, (err: any, doc: mongoose.Document) => {
+      if (err) this.validPost = false;
+      this.validPost = true;
     });
   }
 
