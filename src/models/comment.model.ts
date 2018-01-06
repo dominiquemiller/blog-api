@@ -1,4 +1,5 @@
 import * as mongoose from "mongoose";
+import { default as Post } from "./post.model";
 
 export interface CommentModel extends mongoose.Document {
   body: string;
