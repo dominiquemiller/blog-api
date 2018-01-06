@@ -16,6 +16,7 @@
   "author": "Dominique Miller",
   "license": "ISC",
   "dependencies": {
+    "@types/passport-http-bearer": "^1.0.31",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.18.2",
     "boom": "^7.1.1",
