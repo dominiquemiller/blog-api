@@ -5,6 +5,9 @@ import * as mongoose from "mongoose";
 import * as passport from "passport";
 import * as cors from "cors";
 import { routes } from "./routes";
+import { strategy } from "./config/passport";
+
+passport.use(strategy);
 
 // Attach .env variables to process.env
 dotenv.config();
@@ -29,6 +32,7 @@ const db = mongoose.connect(process.env.MONGO_URI,  {useMongoClient: true}, err 
 // set cors options
 app.use(cors(corsOptions));
 
+app.use(passport.initialize());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
