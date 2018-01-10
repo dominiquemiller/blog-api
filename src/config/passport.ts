@@ -10,9 +10,9 @@ export interface JwtOptions {
   secretOrKey: string;
 }
 
-export const jwtOptions: JwtOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: "superSecretBlogKey"
+export const jwtOptions: JwtOptions  = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("JWT"),
+  secretOrKey: "domsBlog"
 };
 
 export const strategy = new JwtStrategy(jwtOptions, (jwtPayload, done) => {
