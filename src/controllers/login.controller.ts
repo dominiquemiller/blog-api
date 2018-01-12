@@ -14,7 +14,7 @@ function createJWT(user: UserModel) {
 
 export let login = (req: Request, res: Response, next: NextFunction) => {
   User.findOne({ email: req.body.email }, (err, user: UserModel) => {
-    if (err) next(boom.unauthorized(err));
+    if (err || user === null) next(boom.unauthorized(err || "user not found"));
     user.comparePassword(req.body.password, async (err, isMatch) => {
       const passwordNoMatch = "Password does not match";
       if (err || !isMatch) next(boom.unauthorized(err || passwordNoMatch));
