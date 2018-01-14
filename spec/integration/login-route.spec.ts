@@ -6,7 +6,7 @@ import * as dbHelpers from "../db_helpers/db.helper";
 const tellJasmineDone = require("jasmine-supertest");
 import {} from "jasmine";
 
-describe("Login Routes", () => {
+describe("Login Route", () => {
   beforeAll( (done) => {
      dbHelpers.seedModel("User")
       .then( (value: any) => {
@@ -26,6 +26,18 @@ describe("Login Routes", () => {
                      .expect(401)
                      .expect((res: any) => {
                         if (res.body.message !== "Password does not match") throw new Error("Incorrect error message");
+                      })
+                     .end(tellJasmineDone(done));
+  });
+
+  it("should return 401 unauthorized when email not found", (done) => {
+    const login = { "email": "fake@email.com", "password": "fakepassword" };
+
+    supertest(server).post("/api/login")
+                     .send(login)
+                     .expect(401)
+                     .expect((res: any) => {
+                        if (res.body.message !== "User not found") throw new Error("Incorrect error message");
                       })
                      .end(tellJasmineDone(done));
   });
