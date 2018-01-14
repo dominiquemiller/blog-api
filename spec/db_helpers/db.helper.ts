@@ -17,7 +17,8 @@ const models: Models = { "User": { name: User, data: users } };
 
 export const dropDB = (): void => {
   for (const key in models) {
-    models[key].name.collection.drop();
+    const model = models[key].name;
+    model.collection.drop().then( (data) => { console.log("dropDb", data); } );
   }
 };
 

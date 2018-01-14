@@ -1,5 +1,4 @@
 process.env.NODE_ENV = "test";
-process.env.PORT = "5555";
 
 import * as supertest from "supertest";
 import * as server from "../../src/server";
