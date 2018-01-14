@@ -24,7 +24,9 @@ describe("Login Routes", () => {
     supertest(server).post("/api/login")
                      .send(login)
                      .expect(401)
-                     .expect((res: any) => { console.log(res.body); })
+                     .expect((res: any) => {
+                      if (res.body.message !== "Password does not match") throw new Error("Incorrect error message");
+                      })
                      .end(tellJasmineDone(done));
   });
 
@@ -34,8 +36,10 @@ describe("Login Routes", () => {
     supertest(server).post("/api/login")
                      .send(login)
                      .expect(201)
-                     .expect((res: any) => { console.log(res.body); })
-                     .end(tellJasmineDone(done))
+                     .expect((res: any) => {
+                       if (!res.body.token) throw new Error("Token not returned");
+                      })
+                     .end(tellJasmineDone(done));
   });
   
 });
