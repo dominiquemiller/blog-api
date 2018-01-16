@@ -8,4 +8,4 @@ export function errorHandler(err: BoomError, req: Request, res: Response, next: 
   else {
     res.status(500).send("Something Went Wrong");
   }
-};
+}
