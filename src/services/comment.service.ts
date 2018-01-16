@@ -40,7 +40,6 @@ export class CommentService {
       Post.update({ _id: this.postId },
                   { $push: { comments: id } },
                     (err, success) => {
-                      console.log("update", err, success)
                       if (err) rej(err);
                       res(success);
                     } );
