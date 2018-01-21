@@ -13,7 +13,7 @@ export function createJWT(user: UserModel) {
 }
 
 export let login = (req: Request, res: Response, next: NextFunction) => {
-  User.findOne({ email: req.body.email }, (err, user: UserModel) => {
+  User.findOne({ email: req.body.email }, "+password", (err, user: UserModel) => {
     if (err || user === null)  {
       next(boom.unauthorized(err || "User not found"));
     } else {

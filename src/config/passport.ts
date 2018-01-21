@@ -17,10 +17,12 @@ export const jwtOptions: JwtOptions  = {
 
 export const strategy = new JwtStrategy(jwtOptions, (jwtPayload, done) => {
   console.log("payload received", jwtPayload);
-  User.findById(jwtPayload.id, (err, user) => {
-    if (err) return done(null, false);
+  User.findById(jwtPayload.id)
+      .select("+password")
+      .exec(jwtPayload.id, (err, user) => {
+        if (err) return done(null, false);
 
-    return done(null, user);
-  });
+        return done(null, user);
+      });
 });
 
