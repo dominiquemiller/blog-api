@@ -20,7 +20,6 @@ const corsOptions = {
 };
 
 const db = mongoose.connect(`${envConfig.db.connect}${envConfig.db.name}`,  {useMongoClient: true}, err => {
-  console.log(`${envConfig.db.connect}${envConfig.db.name}`);
   if (err) {
     console.log(`MongoDB connection error. Please make sure MongoDB is running. Error:${err}`);
   }

@@ -18,7 +18,6 @@ export let index = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export let create = (req: Request, res: Response, next: NextFunction) => {
-
   Post.create( req.body, (err, post) => {
     if (err) next(boom.badRequest(err));
 

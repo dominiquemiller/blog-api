@@ -2,7 +2,7 @@ process.env.NODE_ENV = "test";
 
 import * as supertest from "supertest";
 import * as server from "../../src/server";
-import * as dbHelpers from "../db_helpers/db.helper";
+import * as dbHelpers from "../helpers/db.helper";
 const tellJasmineDone = require("jasmine-supertest");
 import {} from "jasmine";
 
