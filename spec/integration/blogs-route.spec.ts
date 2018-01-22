@@ -9,13 +9,12 @@ import {} from "jasmine";
 
 describe("Blogs Route", () => {
 
-  beforeAll( (done) => {
-    // populate DB with users and use one to create blog posts
-     dbHelpers.seedModel("User")
-      .then( async(value: UserModel) => {
-        const posts = await dbHelpers.seedPosts(value._id);
-        done();
-      });
+  beforeAll( async (done) => {
+    // seed test DB with users and store returned user
+    const user = await dbHelpers.seedModel("User");
+    // seed test DB with posts authored by const user
+    const posts = await dbHelpers.seedPosts(user._id);
+    done();
   });
 
   afterAll( () => {
