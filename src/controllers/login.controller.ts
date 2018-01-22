@@ -4,7 +4,11 @@ import { default as User, UserModel } from "../models/user.model";
 import * as jwt from "jsonwebtoken";
 import * as boom from "boom";
 
-export function createJWT(user: UserModel) {
+export interface JWT {
+  token: string;
+};
+
+export function createJWT(user: UserModel): Promise<JWT> {
   return new Promise((res, rej) => {
     const payload = { id: user.id };
     const token = jwt.sign(payload, jwtOptions.secretOrKey);
