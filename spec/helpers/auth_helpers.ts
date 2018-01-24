@@ -10,9 +10,8 @@ export const getUser = () => {
   });
 };
 
-export const userJwt = () => {
+export const userJwt = (user: UserModel) => {
   return new Promise<JWT>( async(res, rej) => {
-    const user = await getUser();
     const jwt = await createJWT(user);
     res(jwt);
   });
