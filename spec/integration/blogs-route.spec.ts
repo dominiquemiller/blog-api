@@ -33,7 +33,7 @@ describe("Blogs Route", () => {
 
   it("POST should create a new blog post with a valid user", async (done) => {
     const user = await getUser();
-    const jwt = await userJwt();
+    const jwt = await userJwt(user);
     const blogPost = { "author": user._id, "title": "Fantastic blog ideas", "body": "i have no ideas" };
 
     supertest(server).post("/api/blogs")
@@ -44,6 +44,22 @@ describe("Blogs Route", () => {
                        if ( res.body.title !== blogPost.title ) throw new Error("Wrong title returned");
                        if ( res.body.body !== blogPost.body ) throw new Error("Wrong body returned");
                       })
+                     .end(tellJasmineDone(done));
+  });
+
+  it("PATCH should update a blog post with a valid user", () => {
+
+  });
+
+  it("should return a blog post by id", async (done) => {
+    const blogPost = await dbHelpers.getAPost();
+
+    supertest(server).get(`/api/blog/${blogPost._id}`)
+                     .expect(200)
+                     .expect( (res: any) => {
+                       const post = res.body;
+                       if (post.title !== blogPost.title) throw new Error("Incorrect post returned");
+                     })
                      .end(tellJasmineDone(done));
   });
 

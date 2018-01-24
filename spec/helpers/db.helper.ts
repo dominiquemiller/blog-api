@@ -4,7 +4,7 @@ import { users } from "../fixtures/users.fixture";
 import { posts } from "../fixtures/posts.fixture";
 // models
 import { default as User, UserModel } from "../../src/models/user.model";
-import { default as Post } from "../../src/models/post.model";
+import { default as Post, PostModel } from "../../src/models/post.model";
 
 export interface ModelSeed {
   name: mongoose.Model<any>;
@@ -50,6 +50,14 @@ export const seedPosts = (userId: string) => {
           res(doc);
         }
       });
+    });
+  });
+};
+
+export const getAPost = () => {
+  return new Promise<PostModel>( (res, rej) => {
+    Post.findOne({}, (err: any, doc: PostModel) => {
+      res(doc);
     });
   });
 };

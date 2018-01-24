@@ -16,7 +16,6 @@ export const jwtOptions: JwtOptions  = {
 };
 
 export const strategy = new JwtStrategy(jwtOptions, (jwtPayload, done) => {
-  console.log("payload received", jwtPayload);
   User.findById(jwtPayload.id)
       .exec( (err, user) => {
         if (err) return done(null, false);
