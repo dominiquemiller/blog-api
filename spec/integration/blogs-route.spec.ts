@@ -47,7 +47,21 @@ describe("Blogs Route", () => {
                      .end(tellJasmineDone(done));
   });
 
-  it("PATCH should update a blog post with a valid user", () => {
+  it("PATCH should update a blog post with a valid user", async(done) => {
+    const user = await getUser();
+    const jwt = await userJwt(user);
+    const post = await dbHelpers.getAPost();
+
+    const payload = { title: "my updated post title", body: post.body };
+
+    supertest(server).post(`/api/blog/${post._id}`)
+                     .set("Authorization", `JWT ${jwt.token}`)
+                     .send(payload)
+                     .expect(200)
+                     .expect( (res: any) => {
+                      if (res.body.ok !== 1) throw new Error("Update unsuccessful");
+                     })
+                     .end(tellJasmineDone(done));
 
   });
 

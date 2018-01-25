@@ -26,7 +26,6 @@ export let create = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export let update = (req: Request, res: Response, next: NextFunction) => {
-
   Post.update({ _id: req.params.id }, { $set: { title: req.body.title, body: req.body.body } }, (err, post) => {
     if (err) next(boom.badData(err));
     res.json(post);
