@@ -13,7 +13,7 @@ export function routes(app: Express) {
 
   app.route("/api/blog/:id")
      .get(blogController.show)
-     .patch(passport.authenticate("jwt", { session: false }), blogController.update);
+     .post(passport.authenticate("jwt", { session: false }), blogController.update);
 
   app.post("/api/comment", commentController.create );
 
