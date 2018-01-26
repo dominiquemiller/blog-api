@@ -7,11 +7,9 @@ const tellJasmineDone = require("jasmine-supertest");
 import {} from "jasmine";
 
 describe("Login Route", () => {
-  beforeAll( (done) => {
-     dbHelpers.seedModel("User")
-      .then( (value: any) => {
-        if (value) done();
-      });
+  beforeAll( async (done) => {
+    const user = await dbHelpers.seedModel("User");
+    done();
   });
 
   afterAll( () => {

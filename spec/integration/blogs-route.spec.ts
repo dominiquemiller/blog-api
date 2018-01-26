@@ -11,9 +11,7 @@ import { userJwt, getUser } from "../helpers/auth_helpers";
 describe("Blogs Route", () => {
 
   beforeAll( async (done) => {
-    // seed test DB with users and store returned user
     const user = await dbHelpers.seedModel("User");
-    // seed test DB with posts authored by const user
     const posts = await dbHelpers.seedPosts(user._id);
     done();
   });
