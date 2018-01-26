@@ -16,11 +16,10 @@ export class CommentService {
   }
 
   createComment() {
-    new Promise( async (res, rej ) => {
+    return new Promise( async (res, rej ) => {
 
       const comment = await Comment.create( { body: this.body, email: this.email },
         (err: any, doc: mongoose.Document ) => {
-          console.log("createComment", err, doc);
           if (err) rej(err);
           return doc;
       });
