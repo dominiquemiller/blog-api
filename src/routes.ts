@@ -3,6 +3,7 @@ import * as blogController from "./controllers/blog.controller";
 import { errorHandler } from "./middleware/error.handler";
 import * as commentController from "./controllers/comment.controller";
 import * as loginController from "./controllers/login.controller";
+import * as accountController from "./controllers/account.controller";
 import * as passport from "passport";
 
 export function routes(app: Express) {
@@ -19,7 +20,7 @@ export function routes(app: Express) {
 
   app.post("/api/login", loginController.login);
 
-  app.post("/api/account", loginController.create);
+  app.post("/api/account", accountController.create);
 
   app.use(errorHandler);
 
