@@ -32,12 +32,3 @@ export let login = (req: Request, res: Response, next: NextFunction) => {
   });
 
 };
-
-export let create = (req: Request, res: Response, next: NextFunction) => {
-  User.create(req.body, (err, user) => {
-    if (err) next(boom.badRequest(err));
-
-    res.status(201).json({ message: "ok"});
-  });
-};
-
