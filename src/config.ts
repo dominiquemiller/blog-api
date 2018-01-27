@@ -20,7 +20,7 @@ const development = {
    port: parseInt(process.env.DEV_APP_PORT) || 3000
  },
  db: {
-   name: process.env.DEV_DB_NAME || "blog",
+   name: process.env.DEV_DB_NAME,
    connect: process.env.MONGO_URI
  }
 };
@@ -29,7 +29,7 @@ const test = {
    port: parseInt(process.env.TEST_APP_PORT) || 5000
  },
  db: {
-   name: process.env.TEST_DB_NAME || "blog-test",
+   name: process.env.TEST_DB_NAME,
    connect: process.env.MONGO_URI_TEST
  }
 };
@@ -38,7 +38,7 @@ const production = {
     port: parseInt(process.env.DEV_APP_PORT) || 3000
   },
   db: {
-    name: process.env.PROD_DB_NAME || "blog",
+    name: process.env.PROD_DB_NAME,
     connect: process.env.MONGO_URI
   }
 };
