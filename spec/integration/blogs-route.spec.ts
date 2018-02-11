@@ -52,7 +52,7 @@ describe("Blogs Route", () => {
 
     const payload = { title: "my updated post title", body: post.body };
 
-    supertest(server).post(`/api/blog/${post._id}`)
+    supertest(server).post(`/api/blogs/${post._id}`)
                      .set("Authorization", `JWT ${jwt.token}`)
                      .send(payload)
                      .expect(200)
@@ -66,7 +66,7 @@ describe("Blogs Route", () => {
   it("should return a blog post by id", async (done) => {
     const blogPost = await dbHelpers.getAPost();
 
-    supertest(server).get(`/api/blog/${blogPost._id}`)
+    supertest(server).get(`/api/blogs/${blogPost._id}`)
                      .expect(200)
                      .expect( (res: any) => {
                        const post = res.body;
