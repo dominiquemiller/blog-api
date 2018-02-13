@@ -1,12 +1,37 @@
 import { Response, Request, NextFunction } from "express";
-import { jwtOptions } from "../config/passport";
-import * as jwt from "jsonwebtoken";
+import { Category } from "../models/category.model";
 import * as boom from "boom";
 
-export let create = () => {};
+export let index = (req: Request, res: Response, next: NextFunction) => {
+  Category.find( (err, cats) => {
+       if (err) next(boom.notFound(err));
 
-export let update = () => {};
+       res.json(cats);
+     });
+};
 
-export let index = () => {};
+export let create = (req: Request, res: Response, next: NextFunction) => {
+  Category.create( req.body, (err, cat) => {
+    if (err) next(boom.badRequest(err));
 
-export let show = () => {};
+    res.json(cat);
+  });
+};
+
+export let update = (req: Request, res: Response, next: NextFunction) => {
+  const category = req.body;
+  Category.update({ _id: req.params.id }, { title: category.title, posts: category.post }, (err, data) => {
+    if (err) next(boom.badData(err));
+    res.json(data);
+  });
+};
+
+
+export let show = (req: Request, res: Response, next: NextFunction) => {
+  Category.findById(req.params.id)
+      .populate("posts")
+      .exec( (err, cat) => {
+        if (err) next(boom.notFound(err));
+        res.json(cat);
+      });
+};
