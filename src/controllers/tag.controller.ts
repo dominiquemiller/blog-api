@@ -1,12 +1,38 @@
 import { Response, Request, NextFunction } from "express";
-import { jwtOptions } from "../config/passport";
+import { Tag } from "../models/tag.model";
 import * as jwt from "jsonwebtoken";
 import * as boom from "boom";
 
-export let create = () => {};
+export let index = (req: Request, res: Response, next: NextFunction) => {
+  Tag.find( (err, tags) => {
+       if (err) next(boom.notFound(err));
 
-export let update = () => {};
+       res.json(tags);
+     });
+};
 
-export let index = () => {};
+export let create = (req: Request, res: Response, next: NextFunction) => {
+  Tag.create( req.body, (err, tag) => {
+    if (err) next(boom.badRequest(err));
 
-export let show = () => {};
+    res.json(tag);
+  });
+};
+
+export let update = (req: Request, res: Response, next: NextFunction) => {
+  const tag = req.body;
+  Tag.update({ _id: req.params.id }, { title: tag.title, posts: tag.post }, (err, tag) => {
+    if (err) next(boom.badData(err));
+    res.json(tag);
+  });
+};
+
+
+export let show = (req: Request, res: Response, next: NextFunction) => {
+  Tag.findById(req.params.id)
+      .populate("posts")
+      .exec( (err, tag) => {
+        if (err) next(boom.notFound(err));
+        res.json(tag);
+      });
+};

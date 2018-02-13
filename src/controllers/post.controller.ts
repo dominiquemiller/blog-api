@@ -4,8 +4,6 @@ import { default as User } from "../models/user.model";
 import { default as Comment } from "../models/comment.model";
 import * as boom from "boom";
 
-User.findOne();
-
 export let index = (req: Request, res: Response, next: NextFunction) => {
   Post.find()
       .populate({ path: "author" })
