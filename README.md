@@ -1,9 +1,7 @@
 # Blog API 
-
-I've been wanting to create my own blog for quite some time and I also wanted to build something
-using typescript and node, so here we are!  One requirement was I wanted the flexibility to 
-use any front-end framework so building an API was the logical choice! I also want the API 
-to be extendable via plugins.
+I have been interested in building a front-end agnostic blogging 
+platform. Which lead me to the API as the logical choice! 
+I also want the API to be extendable via plugins.
 
 Should you want to fork or contribute to this project please feel free.  
 
@@ -19,10 +17,8 @@ npm run test
 ```
 To run the development server:
 ```
-// watches for changes in the dist folder
-npm run watch-node
 // watches for changes in typescript files located in the src dir
-npm run watch-ts
+npm run watch-ts & npm run watch-node
 ```
 
 To build the api:
