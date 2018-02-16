@@ -2,7 +2,8 @@
 
 I've been wanting to create my own blog for quite some time and I also wanted to build something
 using typescript and node, so here we are!  One requirement was I wanted the flexibility to 
-use any front-end framework so building an API was the logical choice!  
+use any front-end framework so building an API was the logical choice! I also want the API 
+to be extendable via plugins.
 
 Should you want to fork or contribute to this project please feel free.  
 
