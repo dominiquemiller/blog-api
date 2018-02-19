@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 
 export type CategoryModel = mongoose.Document & {
   title: string;
+  posts?: Array<mongoose.Schema.Types.ObjectId>;
 };
 
 const categorySchema = new mongoose.Schema({
