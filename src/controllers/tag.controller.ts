@@ -1,6 +1,5 @@
 import { Response, Request, NextFunction } from "express";
 import { Tag } from "../models/tag.model";
-import * as jwt from "jsonwebtoken";
 import * as boom from "boom";
 
 export let index = (req: Request, res: Response, next: NextFunction) => {

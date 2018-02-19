@@ -4,6 +4,8 @@ import { default as User } from "../models/user.model";
 import { default as Comment } from "../models/comment.model";
 import * as boom from "boom";
 
+import { UpdatePostService } from "../services/update-post.service";
+
 export let index = (req: Request, res: Response, next: NextFunction) => {
   Post.find()
       .populate({ path: "author" })
@@ -23,12 +25,15 @@ export let create = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export let update = (req: Request, res: Response, next: NextFunction) => {
-  const doc = req.body;
-  Post.update({ _id: req.params.id }, { title: doc.title, body: doc.body, tags: doc.tag, categories: doc.categories }, (err, post) => {
-    if (err) next(boom.badData(err));
-    res.json(post);
-  });
+export let update = async (req: Request, res: Response, next: NextFunction) => {
+  const service = new UpdatePostService(req.params.id, req.body);
+
+  try {
+    const update = await service.update();
+    res.json(update);
+  } catch (error) {
+    next(boom.badRequest(error));
+  }
 
 };
 
