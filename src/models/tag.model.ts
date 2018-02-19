@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 
 export type TagModel = mongoose.Document & {
   title: string;
+  posts?: Array<mongoose.Schema.Types.ObjectId>;
 };
 
 const tagSchema = new mongoose.Schema({
