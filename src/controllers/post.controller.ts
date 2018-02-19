@@ -4,7 +4,7 @@ import { default as User } from "../models/user.model";
 import { default as Comment } from "../models/comment.model";
 import * as boom from "boom";
 
-User.findOne();
+import { UpdatePostService } from "../services/update-post.service";
 
 export let index = (req: Request, res: Response, next: NextFunction) => {
   Post.find()
@@ -25,11 +25,15 @@ export let create = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-export let update = (req: Request, res: Response, next: NextFunction) => {
-  Post.update({ _id: req.params.id }, { $set: { title: req.body.title, body: req.body.body } }, (err, post) => {
-    if (err) next(boom.badData(err));
-    res.json(post);
-  });
+export let update = async (req: Request, res: Response, next: NextFunction) => {
+  const service = new UpdatePostService(req.params.id, req.body);
+
+  try {
+    const update = await service.update();
+    res.json(update);
+  } catch (error) {
+    next(boom.badRequest(error));
+  }
 
 };
 
@@ -37,6 +41,8 @@ export let show = (req: Request, res: Response, next: NextFunction) => {
   Post.findById(req.params.id)
       .populate("author")
       .populate("comments")
+      .populate("tags")
+      .populate("categories")
       .exec( (err, post) => {
         if (err) next(boom.notFound(err));
         res.json(post);
