@@ -32,6 +32,7 @@ export const dropDB = (): void => {
   }
 };
 
+// populates collection and returns last document created
 export const seedModel = (name: string) => {
   return new Promise<UserModel>( (res, rej) => {
     models[name].data.forEach( (item, index) => {

@@ -57,7 +57,7 @@ describe("Blogs Route", () => {
                      .send(payload)
                      .expect(200)
                      .expect( (res: any) => {
-                      if (res.body.ok !== 1) throw new Error("Update unsuccessful");
+                      if (res.body.title !== payload.title) throw new Error("Update unsuccessful");
                      })
                      .end(tellJasmineDone(done));
 
