@@ -2,9 +2,14 @@ import * as mongoose from "mongoose";
 // fixtures
 import { users } from "../fixtures/users.fixture";
 import { posts } from "../fixtures/posts.fixture";
+import { categories } from "../fixtures/categories.fixture";
+import { tags } from "../fixtures/tags.fixtures";
+
 // models
 import { default as User, UserModel } from "../../src/models/user.model";
 import { default as Post, PostModel } from "../../src/models/post.model";
+import { Category, CategoryModel } from "../../src/models/category.model";
+import { Tag, TagModel } from "../../src/models/tag.model";
 
 export interface ModelSeed {
   name: mongoose.Model<any>;
@@ -16,7 +21,9 @@ export interface Models {
 }
 
 const models: Models = { "User": { name: User, data: users },
-                         "Posts": { name: Post, data: [] } };
+                         "Posts": { name: Post, data: [] },
+                         "Categories": { name: Category, data: categories },
+                         "Tags": { name: Tag, data: tags } };
 
 export const dropDB = (): void => {
   for (const key in models) {
@@ -25,6 +32,7 @@ export const dropDB = (): void => {
   }
 };
 
+// populates collection and returns last document created
 export const seedModel = (name: string) => {
   return new Promise<UserModel>( (res, rej) => {
     models[name].data.forEach( (item, index) => {

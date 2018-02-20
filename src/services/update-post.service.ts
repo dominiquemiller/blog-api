@@ -5,17 +5,15 @@ import * as mongoose from "mongoose";
 
 export class UpdatePostService {
   postId: mongoose.Schema.Types.ObjectId;
-  postTitle: string;
-  postBody: string;
+  postParams: any;
   categories: mongoose.Schema.Types.ObjectId[];
   tags: mongoose.Schema.Types.ObjectId[];
 
   constructor(id: mongoose.Schema.Types.ObjectId, request: any) {
     this.postId = id;
-    this.postTitle = request.title;
-    this.postBody = request.body;
-    this.categories = request.categories;
-    this.tags = request.tags;
+    this.postParams = request;
+    this.categories = request.categories || [];
+    this.tags = request.tags || [];
   }
 
   update() {
@@ -27,8 +25,9 @@ export class UpdatePostService {
         rej(error);
       }
 
-      Post.findOneAndUpdate({ _id: this.postId }, { title: this.postTitle, body: this.postBody, tags: this.tags, categories: this.categories }, (error, post) => {
+      Post.findOneAndUpdate({ _id: this.postId }, this.postParams, { new: true }, (error, post) => {
         if (error) rej(error);
+
         res(post);
       });
     });
@@ -36,7 +35,7 @@ export class UpdatePostService {
 
   catsAndTags(model: mongoose.Model<mongoose.Document>, items: mongoose.Schema.Types.ObjectId[]) {
     return new Promise( (res, rej) => {
-      if (items.length === 0) rej("Empty Array");
+      if (items === undefined || items.length === 0) res("Empty Array");
 
       items.forEach( (item: mongoose.Schema.Types.ObjectId) => {
         model.findOneAndUpdate({_id: item }, {posts: this.postId}, (err, data) => {
