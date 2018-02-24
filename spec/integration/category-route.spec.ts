@@ -5,7 +5,8 @@ import * as server from "../../src/server";
 import * as dbHelpers from "../helpers/db.helper";
 const tellJasmineDone = require("jasmine-supertest");
 import {} from "jasmine";
-
+import { userJwt, getUser } from "../helpers/auth_helpers";
+import { default as Post, PostModel } from "../../src/models/post.model";
 import { Category, CategoryModel } from "../../src/models/category.model";
 
 describe("Category route", () => {
@@ -46,6 +47,44 @@ describe("Category route", () => {
                      .expect( (res: any) => {
                        if (res.body.title !== "General") throw new Error("Incorrect category returned");
                      })
+                     .end(tellJasmineDone(done));
+  });
+
+  it("POST create a category", async(done) => {
+    const user = await getUser();
+    const jwt = await userJwt(user);
+    const post = await dbHelpers.getAPost();
+
+    const category = { title: "My new category", posts: [ post._id ] };
+
+    supertest(server).post("/api/categories")
+                     .set("Authorization", `JWT ${jwt.token}`)
+                     .send(category)
+                     .expect(200)
+                     .expect( (res: any) => {
+
+                       if ( res.body.title !== category.title ) throw new Error("Wrong title returned");
+                       if ( res.body.posts[0] != category.posts[0] ) throw new Error("Wrong post saved to category");
+                      })
+                     .end(tellJasmineDone(done));
+  });
+
+  it("POST update a category", async(done) => {
+    const user = await getUser();
+    const jwt = await userJwt(user);
+    const post = await Post.findOne().sort({ _id: -1 });
+    const cat: any = await Category.findOne().sort({ _id: -1 });
+
+    const updatedCategory = { title: "Wow a new title",  posts: post._id };
+
+    supertest(server).post(`/api/categories/${cat._id}`)
+                     .set("Authorization", `JWT ${jwt.token}`)
+                     .send(updatedCategory)
+                     .expect(200)
+                     .expect( (res: any) => {
+                       if ( res.body.title == cat.title ) throw new Error("Wrong title returned");
+                       if ( res.body.posts[0] != cat.posts[0] ) throw new Error("Wrong post saved to category");
+                      })
                      .end(tellJasmineDone(done));
   });
 

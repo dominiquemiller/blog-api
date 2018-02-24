@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from "express";
-import { Category } from "../models/category.model";
+import { Category, CategoryModel } from "../models/category.model";
 import * as boom from "boom";
 
 export let index = (req: Request, res: Response, next: NextFunction) => {
@@ -19,10 +19,20 @@ export let create = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export let update = (req: Request, res: Response, next: NextFunction) => {
-  const category = req.body;
-  Category.update({ _id: req.params.id }, { title: category.title, posts: category.post }, (err, data) => {
+  const cat: CategoryModel = req.body;
+  Category.findById(req.params.id, (err, category) => {
     if (err) next(boom.badData(err));
-    res.json(data);
+
+    if (cat.title) {
+      category.set( { title: cat.title } );
+    }
+
+    category.set( { $push: { posts: cat.posts } } );
+    category.save( (err, updated) => {
+      if (err) next(boom.badData(err));
+      res.json(updated);
+    });
+
   });
 };
 
