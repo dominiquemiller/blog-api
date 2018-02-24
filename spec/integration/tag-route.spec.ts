@@ -9,7 +9,7 @@ import { userJwt, getUser } from "../helpers/auth_helpers";
 import { default as Post, PostModel } from "../../src/models/post.model";
 import { Tag, TagModel } from "../../src/models/tag.model";
 
-describe("Category route", () => {
+describe("Tag route", () => {
 
   beforeAll( async (done) => {
     const user = await dbHelpers.seedModel("User");
