@@ -7,13 +7,13 @@ const tellJasmineDone = require("jasmine-supertest");
 import {} from "jasmine";
 import { userJwt, getUser } from "../helpers/auth_helpers";
 import { default as Post, PostModel } from "../../src/models/post.model";
-import { Category, CategoryModel } from "../../src/models/category.model";
+import { Tag, TagModel } from "../../src/models/tag.model";
 
-describe("Category route", () => {
+describe("Tag route", () => {
 
   beforeAll( async (done) => {
     const user = await dbHelpers.seedModel("User");
-    const categories = await dbHelpers.seedModel("Categories");
+    const tags = await dbHelpers.seedModel("Tags");
     const posts = await dbHelpers.seedPosts(user._id);
     done();
   });
@@ -22,7 +22,7 @@ describe("Category route", () => {
     dbHelpers.dropDB();
   });
 
-  it("GET should return a list of categories", (done) => {
+  it("GET should return a list of tags", (done) => {
 
     function countCheck(docArray: Array<any>) {
        return docArray.every( (value: any, index: number) => {
@@ -30,7 +30,7 @@ describe("Category route", () => {
       });
     }
 
-    supertest(server).get("/api/categories")
+    supertest(server).get("/api/tags")
                      .expect(200)
                      .expect( (res: any) => {
                        if (res.body.length !== 4) throw new Error("Incoreect number of posts returned");
@@ -39,51 +39,50 @@ describe("Category route", () => {
                      .end(tellJasmineDone(done));
   });
 
-  it("GET should return a category", async(done) => {
-    const cat = await Category.findOne({ title: "General" });
+  it("GET should return a tag", async(done) => {
+    const tag = await Tag.findOne({ title: "Ruby" });
 
-    supertest(server).get(`/api/categories/${cat._id}`)
+    supertest(server).get(`/api/tags/${tag._id}`)
                      .expect(200)
                      .expect( (res: any) => {
-                       if (res.body.title !== "General") throw new Error("Incorrect category returned");
+                       if (res.body.title !== "Ruby") throw new Error("Incorrect tag returned");
                      })
                      .end(tellJasmineDone(done));
   });
 
-  it("POST create a category", async(done) => {
+  it("POST create a Tag", async(done) => {
     const user = await getUser();
     const jwt = await userJwt(user);
     const post = await dbHelpers.getAPost();
 
-    const category = { title: "My new category", posts: [ post._id ] };
+    const tag = { title: "My new Tag", posts: post._id };
 
-    supertest(server).post("/api/categories")
+    supertest(server).post("/api/tags")
                      .set("Authorization", `JWT ${jwt.token}`)
-                     .send(category)
+                     .send(tag)
                      .expect(200)
                      .expect( (res: any) => {
-
-                       if ( res.body.title !== category.title ) throw new Error("Wrong title returned");
-                       if ( res.body.posts[0] != category.posts[0] ) throw new Error("Wrong post saved to category");
+                       if ( res.body.title != tag.title ) throw new Error("Wrong title returned");
+                       if ( res.body.posts[0] != tag.posts ) throw new Error("Wrong post saved to Tag");
                       })
                      .end(tellJasmineDone(done));
   });
 
-  it("POST update a category", async(done) => {
+  it("POST update a Tag", async(done) => {
     const user = await getUser();
     const jwt = await userJwt(user);
     const post = await Post.findOne().sort({ _id: -1 });
-    const cat: any = await Category.findOne().sort({ _id: -1 });
+    const tag: any = await Tag.findOne().sort({ _id: -1 });
 
-    const updatedCategory = { title: "Wow a new title",  posts: post._id };
+    const updatedTag = { title: "Wow a new title",  posts: post._id };
 
-    supertest(server).post(`/api/categories/${cat._id}`)
+    supertest(server).post(`/api/tags/${tag._id}`)
                      .set("Authorization", `JWT ${jwt.token}`)
-                     .send(updatedCategory)
+                     .send(updatedTag)
                      .expect(200)
                      .expect( (res: any) => {
-                       if ( res.body.title == cat.title ) throw new Error("Wrong title returned");
-                       if ( res.body.posts[0] != cat.posts[0] ) throw new Error("Wrong post saved to category");
+                       if ( res.body.title == tag.title ) throw new Error("Wrong title returned");
+                       if ( res.body.posts[0] != tag.posts ) throw new Error("Wrong post saved to tag");
                       })
                      .end(tellJasmineDone(done));
   });

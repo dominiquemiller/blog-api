@@ -27,8 +27,8 @@ export function routes(app: Express) {
     .post(passport.authenticate("jwt", { session: false }), categoryController.update);
 
   app.route("/api/tags")
-    .get(categoryController.index)
-    .post(passport.authenticate("jwt", { session: false }), categoryController.create);
+    .get(tagController.index)
+    .post(passport.authenticate("jwt", { session: false }), tagController.create);
 
   app.route("/api/tags/:id")
     .get(tagController.show)
