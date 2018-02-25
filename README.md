@@ -1,12 +1,12 @@
-# Blog API 
-I have been interested in building a front-end agnostic blogging 
-platform. Which lead me to the API as the logical choice! 
-I also want the API to be extendable via plugins.
+# CMS / Blog API
+Experimental CMS framework that is front-end agnostic and extendable via plugins. 
+This is in the very early stages and as such is NOT useable yet. Questions / Ideas 
+or contributions are welcome.
 
-Should you want to fork or contribute to this project please feel free.  
 
 To get started:
-  Make sure you have npm, node and typescript installed on your machine.
+  Make sure you have [node / npm](https://nodejs.org/en/), [typescript](https://www.typescriptlang.org) and [nodemon](https://nodemon.io/) installed on your machine.
+
   From your terminal run 
   ```
   npm install or yarn install
@@ -17,8 +17,8 @@ npm run test
 ```
 To run the development server:
 ```
-// watches for changes in typescript files located in the src dir
-npm run watch-ts & npm run watch-node
+// changes are auto compiled and server is restarted
+nodemon
 ```
 
 To build the api:

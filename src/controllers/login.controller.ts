@@ -6,7 +6,7 @@ import * as boom from "boom";
 
 export interface JWT {
   token: string;
-};
+}
 
 export function createJWT(user: UserModel): Promise<JWT> {
   return new Promise((res, rej) => {
