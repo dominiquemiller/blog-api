@@ -7,6 +7,7 @@ import * as cors from "cors";
 import { routes } from "./routes";
 import { strategy } from "./config/passport";
 import { config } from "./config";
+import * as morgan from "morgan";
 
 passport.use(strategy);
 
@@ -27,6 +28,8 @@ const db = mongoose.connect(`${envConfig.db.connect}${envConfig.db.name}`,  {use
     console.log("Connected to MongoDB");
   }
 });
+
+app.use(morgan(envConfig.app.morgan));
 
 // set cors options
 app.use(cors(corsOptions));

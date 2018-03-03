@@ -10,15 +10,16 @@ interface Config {
 }
 
 interface Environment {
-  app: { [key: string]: string | number };
-  db: { [key: string]: string | number };
+  app: { port: string | number, mandrill: string, morgan: string };
+  db: { name: string, connect: string };
 }
 
 
 const development = {
  app: {
    port: parseInt(process.env.DEV_APP_PORT) || 3000,
-   mandrill: process.env.MANDRILL_API
+   mandrill: process.env.MANDRILL_API,
+   morgan: process.env.MORGAN_OUTPUT
  },
  db: {
    name: process.env.DEV_DB_NAME,
@@ -28,7 +29,8 @@ const development = {
 const test = {
  app: {
    port: parseInt(process.env.TEST_APP_PORT) || 5000,
-   mandrill: process.env.MANDRILL_API
+   mandrill: process.env.MANDRILL_API,
+   morgan: process.env.MORGAN_OUTPUT
  },
  db: {
    name: process.env.TEST_DB_NAME,
@@ -38,7 +40,8 @@ const test = {
 const production = {
   app: {
     port: parseInt(process.env.DEV_APP_PORT) || 3000,
-    mandrill: process.env.MANDRILL_API
+    mandrill: process.env.MANDRILL_API,
+    morgan: process.env.MORGAN_OUTPUT
   },
   db: {
     name: process.env.PROD_DB_NAME,
