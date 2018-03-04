@@ -17,7 +17,7 @@ describe("Login Route", () => {
   });
 
   it("should return 401 unauthorized with bad password", (done) => {
-    const login = { "email": "dom@trimagency.com", "password": "fakepassword" };
+    const login = { "email": "admin@test.com", "password": "fakepassword" };
 
     supertest(server).post("/api/login")
                      .send(login)
@@ -41,7 +41,7 @@ describe("Login Route", () => {
   });
 
   it("should return JWT with correct password", (done) => {
-    const login = { "email": "dom@trimagency.com", "password": "password" };
+    const login = { "email": "admin@test.com", "password": "password" };
 
     supertest(server).post("/api/login")
                      .send(login)

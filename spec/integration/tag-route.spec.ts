@@ -51,7 +51,7 @@ describe("Tag route", () => {
   });
 
   it("POST create a Tag", async(done) => {
-    const user = await getUser();
+    const user = await getUser("admin");
     const jwt = await userJwt(user);
     const post = await dbHelpers.getAPost();
 
@@ -68,8 +68,22 @@ describe("Tag route", () => {
                      .end(tellJasmineDone(done));
   });
 
+  it("shouild not allow a role of reader to create a Tag", async(done) => {
+    const user = await getUser("reader");
+    const jwt = await userJwt(user);
+    const post = await dbHelpers.getAPost();
+
+    const tag = { title: "My new Tag", posts: post._id };
+
+    supertest(server).post("/api/tags")
+                     .set("Authorization", `JWT ${jwt.token}`)
+                     .send(tag)
+                     .expect(401)
+                     .end(tellJasmineDone(done));
+  });
+
   it("POST update a Tag", async(done) => {
-    const user = await getUser();
+    const user = await getUser("admin");
     const jwt = await userJwt(user);
     const post = await Post.findOne().sort({ _id: -1 });
     const tag: any = await Tag.findOne().sort({ _id: -1 });
@@ -84,6 +98,21 @@ describe("Tag route", () => {
                        if ( res.body.title == tag.title ) throw new Error("Wrong title returned");
                        if ( res.body.posts[0] != tag.posts ) throw new Error("Wrong post saved to tag");
                       })
+                     .end(tellJasmineDone(done));
+  });
+
+  it("should not allow a role of reader update a Tag", async(done) => {
+    const user = await getUser("reader");
+    const jwt = await userJwt(user);
+    const post = await Post.findOne().sort({ _id: -1 });
+    const tag: any = await Tag.findOne().sort({ _id: -1 });
+
+    const updatedTag = { title: "Wow a new title",  posts: post._id };
+
+    supertest(server).post(`/api/tags/${tag._id}`)
+                     .set("Authorization", `JWT ${jwt.token}`)
+                     .send(updatedTag)
+                     .expect(401)
                      .end(tellJasmineDone(done));
   });
 
