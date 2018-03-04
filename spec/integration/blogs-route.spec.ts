@@ -30,7 +30,8 @@ describe("Blogs Route", () => {
   });
 
   it("POST should create a new blog post with a valid user", async (done) => {
-    const user = await getUser();
+    // get user with role of admin
+    const user = await getUser("admin");
     const jwt = await userJwt(user);
     const blogPost = { "author": user._id, "title": "Fantastic blog ideas", "body": "i have no ideas" };
 
@@ -45,8 +46,20 @@ describe("Blogs Route", () => {
                      .end(tellJasmineDone(done));
   });
 
+  it("should not allow a role of reader to create a new blog post", async (done) => {
+    const user = await getUser("reader");
+    const jwt = await userJwt(user);
+    const blogPost = { "author": user._id, "title": "Fantastic blog ideas", "body": "i have no ideas" };
+
+    supertest(server).post("/api/blogs")
+                     .set("Authorization", `JWT ${jwt.token}`)
+                     .send(blogPost)
+                     .expect(401)
+                     .end(tellJasmineDone(done));
+  });
+
   it("PATCH should update a blog post with a valid user", async(done) => {
-    const user = await getUser();
+    const user = await getUser("admin");
     const jwt = await userJwt(user);
     const post = await dbHelpers.getAPost();
 
@@ -59,6 +72,21 @@ describe("Blogs Route", () => {
                      .expect( (res: any) => {
                       if (res.body.title !== payload.title) throw new Error("Update unsuccessful");
                      })
+                     .end(tellJasmineDone(done));
+
+  });
+
+  it("should not allow a role of reader to update a blog post", async(done) => {
+    const user = await getUser("reader");
+    const jwt = await userJwt(user);
+    const post = await dbHelpers.getAPost();
+
+    const payload = { title: "my updated post title", body: post.body };
+
+    supertest(server).post(`/api/blogs/${post._id}`)
+                     .set("Authorization", `JWT ${jwt.token}`)
+                     .send(payload)
+                     .expect(401)
                      .end(tellJasmineDone(done));
 
   });

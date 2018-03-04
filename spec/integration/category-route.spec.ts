@@ -51,7 +51,7 @@ describe("Category route", () => {
   });
 
   it("POST create a category", async(done) => {
-    const user = await getUser();
+    const user = await getUser("admin");
     const jwt = await userJwt(user);
     const post = await dbHelpers.getAPost();
 
@@ -69,8 +69,22 @@ describe("Category route", () => {
                      .end(tellJasmineDone(done));
   });
 
+  it("should not allow a role of reader to create a category", async(done) => {
+    const user = await getUser("reader");
+    const jwt = await userJwt(user);
+    const post = await dbHelpers.getAPost();
+
+    const category = { title: "My new category", posts: [ post._id ] };
+
+    supertest(server).post("/api/categories")
+                     .set("Authorization", `JWT ${jwt.token}`)
+                     .send(category)
+                     .expect(401)
+                     .end(tellJasmineDone(done));
+  });
+
   it("POST update a category", async(done) => {
-    const user = await getUser();
+    const user = await getUser("admin");
     const jwt = await userJwt(user);
     const post = await Post.findOne().sort({ _id: -1 });
     const cat: any = await Category.findOne().sort({ _id: -1 });
@@ -85,6 +99,21 @@ describe("Category route", () => {
                        if ( res.body.title == cat.title ) throw new Error("Wrong title returned");
                        if ( res.body.posts[0] != cat.posts[0] ) throw new Error("Wrong post saved to category");
                       })
+                     .end(tellJasmineDone(done));
+  });
+
+  it("should not allow a role of reader to update a category", async(done) => {
+    const user = await getUser("reader");
+    const jwt = await userJwt(user);
+    const post = await Post.findOne().sort({ _id: -1 });
+    const cat: any = await Category.findOne().sort({ _id: -1 });
+
+    const updatedCategory = { title: "Wow a new title",  posts: post._id };
+
+    supertest(server).post(`/api/categories/${cat._id}`)
+                     .set("Authorization", `JWT ${jwt.token}`)
+                     .send(updatedCategory)
+                     .expect(401)
                      .end(tellJasmineDone(done));
   });
 

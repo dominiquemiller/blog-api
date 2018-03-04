@@ -7,8 +7,6 @@ export const roleAuthorization = ( roles: string[] ) => {
   return function( req: Request, res: Response, next: NextFunction ) {
       const user = req.user;
 
-      console.log(req.user);
-
       User.findById(user._id, (err, doc: UserModel) => {
 
           if (err) {

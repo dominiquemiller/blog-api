@@ -1,12 +1,9 @@
 import { default as User, UserModel } from "../../src/models/user.model";
 import { createJWT, JWT } from "../../src/controllers/login.controller";
 
-export const getUser = () => {
+export const getUser = (role: string) => {
   return new Promise<UserModel>((res, rej) => {
-    User.findOne()
-        .sort({ field: "asc", _id: -1 })
-        .limit(1)
-        .exec((err, doc: UserModel) => { res(doc) });
+    User.findOne({ role }, (err, doc: UserModel) => { res(doc); } );
   });
 };
 
