@@ -1,6 +1,7 @@
 import { Express } from "express";
+
+// controllers
 import * as postController from "./controllers/post.controller";
-import { errorHandler } from "./middleware/error.handler";
 import * as commentController from "./controllers/comment.controller";
 import * as loginController from "./controllers/login.controller";
 import * as accountController from "./controllers/account.controller";
@@ -8,31 +9,37 @@ import * as categoryController from "./controllers/category.controller";
 import * as tagController from "./controllers/tag.controller";
 import * as passport from "passport";
 
+// middleware
+import { errorHandler } from "./middleware/error.handler";
+import { roleAuthorization } from "./middleware/authorization";
+
 export function routes(app: Express) {
+
+  const jwtAuth = passport.authenticate("jwt", { session: false });
 
   app.route("/api/blogs")
     .get(postController.index)
-    .post(passport.authenticate("jwt", { session: false }), postController.create);
+    .post(jwtAuth, roleAuthorization(["editor", "admin"]), postController.create);
 
   app.route("/api/blogs/:id")
      .get(postController.show)
-     .post(passport.authenticate("jwt", { session: false }), postController.update);
+     .post(jwtAuth, roleAuthorization(["editor", "admin"]), postController.update);
 
   app.route("/api/categories")
     .get(categoryController.index)
-    .post(passport.authenticate("jwt", { session: false }), categoryController.create);
+    .post(jwtAuth, roleAuthorization(["editor", "admin"]), categoryController.create);
 
   app.route("/api/categories/:id")
     .get(categoryController.show)
-    .post(passport.authenticate("jwt", { session: false }), categoryController.update);
+    .post(jwtAuth, roleAuthorization(["editor", "admin"]), categoryController.update);
 
   app.route("/api/tags")
     .get(tagController.index)
-    .post(passport.authenticate("jwt", { session: false }), tagController.create);
+    .post(jwtAuth, roleAuthorization(["editor", "admin"]), tagController.create);
 
   app.route("/api/tags/:id")
     .get(tagController.show)
-    .post(passport.authenticate("jwt", { session: false }), tagController.update);
+    .post(jwtAuth, roleAuthorization(["editor", "admin"]), tagController.update);
 
   app.post("/api/comment", commentController.create );
 

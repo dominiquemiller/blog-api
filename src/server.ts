@@ -29,6 +29,7 @@ const db = mongoose.connect(`${envConfig.db.connect}${envConfig.db.name}`,  {use
   }
 });
 
+// http logging
 app.use(morgan(envConfig.app.morgan));
 
 // set cors options
