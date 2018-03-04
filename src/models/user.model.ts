@@ -4,13 +4,16 @@ import * as mongoose from "mongoose";
 export type UserModel = mongoose.Document & {
   email: string,
   password: string,
+  name: string,
+  role: string,
   comparePassword: (candidatePassword: string, cb: (err: any, isMatch: any) => {}) => void
 };
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, unique: true, required: true },
-  password: { type: String, required: true, select: false }
+  password: { type: String, required: true, select: false },
+  role: { type: String, enum: [ "reader", "editor", "admin" ], default: "reader" }
 }, { timestamps: true });
 
 /**
