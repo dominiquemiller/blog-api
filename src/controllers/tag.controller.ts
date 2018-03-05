@@ -18,20 +18,11 @@ export let create = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export let update = (req: Request, res: Response, next: NextFunction) => {
-  const update = req.body;
-  Tag.findById(req.params.id, (err, tag) => {
-    if (err) next(boom.badData(err));
+  const tag = req.body;
+  Tag.findOneAndUpdate({_id: tag.id }, tag, { new: true}, (err, doc) => {
+    if (err) next(boom.badData("Tag not updated"));
 
-    if (update.title) {
-      tag.set( { title: update.title } );
-    }
-
-    tag.set( { $push: { posts: update.posts } } );
-    tag.save( (err, updated) => {
-      if (err) next(boom.badData(err));
-      res.json(updated);
-    });
-
+    res.json(doc);
   });
 };
 

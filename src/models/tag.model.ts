@@ -7,9 +7,8 @@ export type TagModel = mongoose.Document & {
 
 const tagSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  posts: [ { type: mongoose.Schema.Types.ObjectId, ref: "Post" } ]
 }, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
 
-tagSchema.virtual("count").get(function() { return this.posts.length; });
+tagSchema.virtual("posts", { ref: "Post", localField: "_id", foreignField: "tags" } );
 
 export const Tag = mongoose.model("Tag", tagSchema);
