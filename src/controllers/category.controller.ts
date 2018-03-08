@@ -3,11 +3,13 @@ import { Category, CategoryModel } from "../models/category.model";
 import * as boom from "boom";
 
 export let index = (req: Request, res: Response, next: NextFunction) => {
-  Category.find( (err, cats) => {
-       if (err) next(boom.notFound(err));
+  Category.find()
+          .populate("posts")
+          .exec( (err, cats) => {
+            if (err) next(boom.notFound(err));
 
-       res.json(cats);
-     });
+            res.json(cats);
+          });
 };
 
 export let create = (req: Request, res: Response, next: NextFunction) => {

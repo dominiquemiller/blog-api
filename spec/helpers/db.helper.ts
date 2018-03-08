@@ -52,20 +52,43 @@ export const seedModel = (name: string) => {
   });
 };
 
-export const seedPosts = (userId: string) => {
+export const seedPosts = (userId: string, catIds: string[] = [], tagIds: string[] = []) => {
   return new Promise( (res, rej) => {
+
     posts.forEach( (item, index) => {
       const count = index + 1;
       const length = posts.length;
-      const post = Object.assign({}, item, { author: userId });
+      const post = Object.assign({}, item, { author: userId }, { categories: catIds }, { tags: tagIds });
+
       Post.create(post, (err: any, doc: any) => {
         if (count === length) {
           res(doc);
         }
       });
+
     });
   });
 };
+
+export function idArray(key: string): Promise<string[]> {
+  return new Promise( (res, rej) => {
+    const ids: string[] = [];
+
+    models[key].name.find({}, (err: any, docs ) => {
+      docs.forEach( (doc, index) => {
+        const count = index + 1;
+        const length = docs.length;
+
+        ids.push(doc._id);
+        if (count === length) {
+          res(ids);
+        }
+
+      });
+    });
+
+  });
+}
 
 export const getAPost = () => {
   return new Promise<PostModel>( (res, rej) => {

@@ -14,7 +14,9 @@ describe("Tag route", () => {
   beforeAll( async (done) => {
     const user = await dbHelpers.seedModel("Users");
     const tags = await dbHelpers.seedModel("Tags");
-    const posts = await dbHelpers.seedPosts(user._id);
+    // get tag ids and populate post categories property
+    const tagIds = await dbHelpers.idArray("Tags");
+    const posts = await dbHelpers.seedPosts(user._id, [], tagIds);
     done();
   });
 
@@ -28,6 +30,7 @@ describe("Tag route", () => {
                      .expect(200)
                      .expect( (res: any) => {
                        if (res.body.length !== 4) throw new Error("Incorect number of tags returned");
+                       if (res.body[0].posts.length !== 3) throw new Error("Error populating related posts");
                      })
                      .end(tellJasmineDone(done));
   });
@@ -39,6 +42,7 @@ describe("Tag route", () => {
                      .expect(200)
                      .expect( (res: any) => {
                        if (res.body.title !== "Ruby") throw new Error("Incorrect tag returned");
+                       if (res.body.posts.length !== 3) throw new Error("Error populating related posts");
                      })
                      .end(tellJasmineDone(done));
   });
@@ -59,7 +63,7 @@ describe("Tag route", () => {
                      .end(tellJasmineDone(done));
   });
 
-  it("shouild not allow a role of reader to create a Tag", async(done) => {
+  it("should not allow a role of reader to create a Tag", async(done) => {
     const user = await getUser("reader");
     const jwt = await userJwt(user);
 
