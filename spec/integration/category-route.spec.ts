@@ -15,7 +15,7 @@ describe("Category route", () => {
     const user = await dbHelpers.seedModel("Users");
     const categories = await dbHelpers.seedModel("Categories");
     // get category ids and populate post categories property
-    const catIds = await dbHelpers.categoryIds();
+    const catIds = await dbHelpers.idArray("Categories");
     const posts = await dbHelpers.seedPosts(user._id, catIds);
     done();
   });

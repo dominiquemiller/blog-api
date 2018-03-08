@@ -70,16 +70,16 @@ export const seedPosts = (userId: string, catIds: string[] = []) => {
   });
 };
 
-export function categoryIds(): Promise<string[]> {
+export function idArray(key: string): Promise<string[]> {
   return new Promise( (res, rej) => {
     const ids: string[] = [];
 
-    Category.find({}, (err: any, cats: CategoryModel[]) => {
-      cats.forEach( (cat, index) => {
+    models[key].name.find({}, (err: any, docs ) => {
+      docs.forEach( (doc, index) => {
         const count = index + 1;
-        const length = posts.length;
+        const length = docs.length;
 
-        ids.push(cat._id);
+        ids.push(doc._id);
         if (count === length) {
           res(ids);
         }
