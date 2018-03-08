@@ -14,7 +14,9 @@ describe("Category route", () => {
   beforeAll( async (done) => {
     const user = await dbHelpers.seedModel("Users");
     const categories = await dbHelpers.seedModel("Categories");
-    const posts = await dbHelpers.seedPosts(user._id);
+    // get category ids and populate post categories property
+    const catIds = await dbHelpers.categoryIds();
+    const posts = await dbHelpers.seedPosts(user._id, catIds);
     done();
   });
 
@@ -28,6 +30,7 @@ describe("Category route", () => {
                      .expect(200)
                      .expect( (res: any) => {
                        if (res.body.length !== 4) throw new Error("Incorect number of categories returned");
+                       if (res.body[0].posts.length !== 3) throw new Error("Virtual field not populating with posts");
                      })
                      .end(tellJasmineDone(done));
   });
