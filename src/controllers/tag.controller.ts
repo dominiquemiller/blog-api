@@ -19,7 +19,7 @@ export let create = (req: Request, res: Response, next: NextFunction) => {
 
 export let update = (req: Request, res: Response, next: NextFunction) => {
   const tag = req.body;
-  Tag.findOneAndUpdate({_id: tag.id }, tag, { new: true}, (err, doc) => {
+  Tag.findOneAndUpdate({_id: req.params.id }, tag, { new: true}, (err, doc) => {
     if (err) next(boom.badData("Tag not updated"));
 
     res.json(doc);

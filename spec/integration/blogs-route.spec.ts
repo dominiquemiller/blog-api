@@ -11,13 +11,13 @@ import { userJwt, getUser } from "../helpers/auth_helpers";
 describe("Blogs Route", () => {
 
   beforeAll( async (done) => {
-    const user = await dbHelpers.seedModel("User");
+    const user = await dbHelpers.seedModel("Users");
     const posts = await dbHelpers.seedPosts(user._id);
     done();
   });
 
   afterAll( () => {
-    dbHelpers.dropDB();
+    dbHelpers.dropDB({ users: "Users", posts: "Posts"});
   });
 
   it("GET should return a list of blog posts", (done) => {

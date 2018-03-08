@@ -20,14 +20,19 @@ export interface Models {
   [key: string]: ModelSeed;
 }
 
-const models: Models = { "User": { name: User, data: users },
+export interface Collections {
+  [key: string]: string;
+}
+
+const models: Models = { "Users": { name: User, data: users },
                          "Posts": { name: Post, data: [] },
                          "Categories": { name: Category, data: categories },
                          "Tags": { name: Tag, data: tags } };
 
-export const dropDB = (): void => {
-  for (const key in models) {
-    const model = models[key].name;
+export const dropDB = (collections: Collections): void => {
+  for (const key in collections) {
+    const value = collections[key];
+    const model = models[value].name;
     model.collection.drop().then( (data) => { console.log("dropDb", data); } );
   }
 };
