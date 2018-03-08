@@ -8,13 +8,13 @@ import {} from "jasmine";
 
 describe("Comment Route", () => {
   beforeAll( async (done) => {
-    const user = await dbHelpers.seedModel("User");
+    const user = await dbHelpers.seedModel("Users");
     const posts = await dbHelpers.seedPosts(user._id);
     done();
   });
 
   afterAll( () => {
-    dbHelpers.dropDB();
+    dbHelpers.dropDB({ users: "Users", posts: "Posts" });
   });
 
   it("should create a comment and attach to blog post", async(done) => {

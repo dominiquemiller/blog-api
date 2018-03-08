@@ -20,19 +20,10 @@ export let create = (req: Request, res: Response, next: NextFunction) => {
 
 export let update = (req: Request, res: Response, next: NextFunction) => {
   const cat: CategoryModel = req.body;
-  Category.findById(req.params.id, (err, category) => {
-    if (err) next(boom.badData(err));
+  Category.findOneAndUpdate({ _id: req.params.id }, cat, { new: true }, (err, doc) => {
+    if (err) next(boom.badData("Category not updated"));
 
-    if (cat.title) {
-      category.set( { title: cat.title } );
-    }
-
-    category.set( { $push: { posts: cat.posts } } );
-    category.save( (err, updated) => {
-      if (err) next(boom.badData(err));
-      res.json(updated);
-    });
-
+    res.json(doc);
   });
 };
 

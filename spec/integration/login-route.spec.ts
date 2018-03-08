@@ -8,12 +8,12 @@ import {} from "jasmine";
 
 describe("Login Route", () => {
   beforeAll( async (done) => {
-    const user = await dbHelpers.seedModel("User");
+    const user = await dbHelpers.seedModel("Users");
     done();
   });
 
   afterAll( () => {
-    dbHelpers.dropDB();
+    dbHelpers.dropDB({ users: "Users" });
   });
 
   it("should return 401 unauthorized with bad password", (done) => {

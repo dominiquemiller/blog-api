@@ -12,29 +12,22 @@ import { Tag, TagModel } from "../../src/models/tag.model";
 describe("Tag route", () => {
 
   beforeAll( async (done) => {
-    const user = await dbHelpers.seedModel("User");
+    const user = await dbHelpers.seedModel("Users");
     const tags = await dbHelpers.seedModel("Tags");
     const posts = await dbHelpers.seedPosts(user._id);
     done();
   });
 
   afterAll( () => {
-    dbHelpers.dropDB();
+    dbHelpers.dropDB({ users: "Users", posts: "Posts", tags: "Tags" });
   });
 
   it("GET should return a list of tags", (done) => {
 
-    function countCheck(docArray: Array<any>) {
-       return docArray.every( (value: any, index: number) => {
-        return value.count === 0;
-      });
-    }
-
     supertest(server).get("/api/tags")
                      .expect(200)
                      .expect( (res: any) => {
-                       if (res.body.length !== 4) throw new Error("Incoreect number of posts returned");
-                       if (!countCheck(res.body)) throw new Error("Incorrect count of posts for each category");
+                       if (res.body.length !== 4) throw new Error("Incorect number of tags returned");
                      })
                      .end(tellJasmineDone(done));
   });
@@ -53,9 +46,8 @@ describe("Tag route", () => {
   it("POST create a Tag", async(done) => {
     const user = await getUser("admin");
     const jwt = await userJwt(user);
-    const post = await dbHelpers.getAPost();
 
-    const tag = { title: "My new Tag", posts: post._id };
+    const tag = { title: "My new Tag" };
 
     supertest(server).post("/api/tags")
                      .set("Authorization", `JWT ${jwt.token}`)
@@ -63,7 +55,6 @@ describe("Tag route", () => {
                      .expect(200)
                      .expect( (res: any) => {
                        if ( res.body.title != tag.title ) throw new Error("Wrong title returned");
-                       if ( res.body.posts[0] != tag.posts ) throw new Error("Wrong post saved to Tag");
                       })
                      .end(tellJasmineDone(done));
   });
@@ -71,9 +62,8 @@ describe("Tag route", () => {
   it("shouild not allow a role of reader to create a Tag", async(done) => {
     const user = await getUser("reader");
     const jwt = await userJwt(user);
-    const post = await dbHelpers.getAPost();
 
-    const tag = { title: "My new Tag", posts: post._id };
+    const tag = { title: "My new Tag" };
 
     supertest(server).post("/api/tags")
                      .set("Authorization", `JWT ${jwt.token}`)
@@ -85,10 +75,9 @@ describe("Tag route", () => {
   it("POST update a Tag", async(done) => {
     const user = await getUser("admin");
     const jwt = await userJwt(user);
-    const post = await Post.findOne().sort({ _id: -1 });
     const tag: any = await Tag.findOne().sort({ _id: -1 });
 
-    const updatedTag = { title: "Wow a new title",  posts: post._id };
+    const updatedTag = { title: "Wow a new title" };
 
     supertest(server).post(`/api/tags/${tag._id}`)
                      .set("Authorization", `JWT ${jwt.token}`)
@@ -96,7 +85,6 @@ describe("Tag route", () => {
                      .expect(200)
                      .expect( (res: any) => {
                        if ( res.body.title == tag.title ) throw new Error("Wrong title returned");
-                       if ( res.body.posts[0] != tag.posts ) throw new Error("Wrong post saved to tag");
                       })
                      .end(tellJasmineDone(done));
   });
@@ -104,10 +92,9 @@ describe("Tag route", () => {
   it("should not allow a role of reader update a Tag", async(done) => {
     const user = await getUser("reader");
     const jwt = await userJwt(user);
-    const post = await Post.findOne().sort({ _id: -1 });
     const tag: any = await Tag.findOne().sort({ _id: -1 });
 
-    const updatedTag = { title: "Wow a new title",  posts: post._id };
+    const updatedTag = { title: "Wow a new title" };
 
     supertest(server).post(`/api/tags/${tag._id}`)
                      .set("Authorization", `JWT ${jwt.token}`)

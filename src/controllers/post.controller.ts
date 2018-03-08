@@ -1,15 +1,15 @@
 import { Response, Request, NextFunction } from "express";
-import { default as Post } from "../models/post.model";
+import { default as Post, PostModel } from "../models/post.model";
 import { default as User } from "../models/user.model";
 import { default as Comment } from "../models/comment.model";
 import * as boom from "boom";
 
-import { UpdatePostService } from "../services/update-post.service";
-
 export let index = (req: Request, res: Response, next: NextFunction) => {
   Post.find()
-      .populate({ path: "author" })
+      .populate("author")
       .populate("comments")
+      .populate("tags")
+      .populate("categories")
       .exec( (err, posts) => {
         if (err) next(boom.notFound(err));
 
@@ -26,15 +26,11 @@ export let create = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export let update = async (req: Request, res: Response, next: NextFunction) => {
-  const service = new UpdatePostService(req.params.id, req.body);
+  Post.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, post ) => {
+    if (err) next(boom.badData());
 
-  try {
-    const update = await service.update();
-    res.json(update);
-  } catch (error) {
-    next(boom.badRequest(error));
-  }
-
+    res.json(post);
+  });
 };
 
 export let show = (req: Request, res: Response, next: NextFunction) => {
