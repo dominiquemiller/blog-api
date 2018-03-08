@@ -52,13 +52,13 @@ export const seedModel = (name: string) => {
   });
 };
 
-export const seedPosts = (userId: string, catIds: string[] = []) => {
+export const seedPosts = (userId: string, catIds: string[] = [], tagIds: string[] = []) => {
   return new Promise( (res, rej) => {
 
     posts.forEach( (item, index) => {
       const count = index + 1;
       const length = posts.length;
-      const post = Object.assign({}, item, { author: userId }, { categories: catIds });
+      const post = Object.assign({}, item, { author: userId }, { categories: catIds }, { tags: tagIds });
 
       Post.create(post, (err: any, doc: any) => {
         if (count === length) {

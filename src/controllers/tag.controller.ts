@@ -3,8 +3,11 @@ import { Tag } from "../models/tag.model";
 import * as boom from "boom";
 
 export let index = (req: Request, res: Response, next: NextFunction) => {
-  Tag.find( (err, tags) => {
+  Tag.find()
+     .populate("posts")
+     .exec( (err, tags) => {
        if (err) next(boom.notFound(err));
+
        res.json(tags);
      });
 };
