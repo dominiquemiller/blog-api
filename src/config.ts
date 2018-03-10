@@ -5,14 +5,17 @@ dotenv.config();
 
 const env = process.env.NODE_ENV;
 
-interface Config {
+export interface Config {
+  development: Environment;
+  test: Environment;
+  production: Environment;
   [key: string]: Environment;
 }
 
 interface Environment {
   app: { port: string | number, mandrill: string, morgan: string };
   db: { name: string, connect: string };
-  s3?: { accessKey: string, secretKey: string, region: string, bucket: string };
+  s3?: { accessKeyId: string, secretAccessKey: string, region: string, bucket: string };
 }
 
 
@@ -27,8 +30,8 @@ const development = {
    connect: process.env.MONGO_URI
  },
  s3: {
-   accessKey: process.env.ACCESSKEY,
-   secretKey: process.env.SECRETKEY,
+   accessKeyId: process.env.ACCESSKEY,
+   secretAccessKey: process.env.SECRETKEY,
    region: process.env.REGION,
    bucket: process.env.DEV_BUCKET_NAME
  }
@@ -55,8 +58,8 @@ const production = {
     connect: process.env.MONGO_URI
   },
   s3: {
-    accessKey: process.env.ACCESSKEY,
-    secretKey: process.env.SECRETKEY,
+    accessKeyId: process.env.ACCESSKEY,
+    secretAccessKey: process.env.SECRETKEY,
     region: process.env.REGION,
     bucket: process.env.PROD_BUCKET_NAME
   }
