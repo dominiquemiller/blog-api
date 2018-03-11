@@ -1,7 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import * as boom from "boom";
 import { Media, MediaModel } from "../models/media.model";
-import * as s3Service from "../services/s3.service";
 
 export let create = (req: any, res: Response, next: NextFunction) => {
   if (req.file) {
