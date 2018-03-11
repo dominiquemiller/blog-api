@@ -12,10 +12,10 @@ export let create = (req: any, res: Response, next: NextFunction) => {
       if (err) next(err);
 
       media.expiringUrl(media.key, 3000, (err: null, url: string) => {
-        console.log(url);
-        res.json(url);
+        const doc = { url, name: media.name, id: media._id };
+        res.json(doc);
       });
 
     });
   }
-}
+};
