@@ -8,10 +8,13 @@ import * as accountController from "./controllers/account.controller";
 import * as categoryController from "./controllers/category.controller";
 import * as tagController from "./controllers/tag.controller";
 import * as passport from "passport";
+import * as mediaController from "./controllers/media.controller";
 
 // middleware
 import { errorHandler } from "./middleware/error.handler";
 import { roleAuthorization } from "./middleware/authorization";
+import { uploadToS3 } from "./middleware/s3-file-upload";
+
 
 export function routes(app: Express) {
 
@@ -40,6 +43,9 @@ export function routes(app: Express) {
   app.route("/api/tags/:id")
     .get(tagController.show)
     .post(jwtAuth, roleAuthorization(["editor", "admin"]), tagController.update);
+
+  app.route("/api/media")
+    .post(uploadToS3().single("photo"), mediaController.create);
 
   app.post("/api/comment", commentController.create );
 

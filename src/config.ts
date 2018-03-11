@@ -30,8 +30,8 @@ const development = {
    connect: process.env.MONGO_URI
  },
  s3: {
-   accessKeyId: process.env.ACCESSKEY,
-   secretAccessKey: process.env.SECRETKEY,
+   accessKeyId: process.env.AWS_ACCESS_KEY,
+   secretAccessKey: process.env.AWS_SECTRET_KEY,
    region: process.env.REGION,
    bucket: process.env.DEV_BUCKET_NAME
  }
@@ -58,8 +58,8 @@ const production = {
     connect: process.env.MONGO_URI
   },
   s3: {
-    accessKeyId: process.env.ACCESSKEY,
-    secretAccessKey: process.env.SECRETKEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECTRET_KEY,
     region: process.env.REGION,
     bucket: process.env.PROD_BUCKET_NAME
   }

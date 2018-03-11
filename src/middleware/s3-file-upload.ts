@@ -7,7 +7,7 @@ const env = process.env.NODE_ENV;
 const envConfig = config[env];
 const { region, accessKeyId, secretAccessKey, bucket } = envConfig.s3;
 
-export const uploadToS3 = () => {
+export const uploadToS3 = (): multer.Instance => {
   const s3 = new S3( { accessKeyId, secretAccessKey, region } );
 
   return multer({
