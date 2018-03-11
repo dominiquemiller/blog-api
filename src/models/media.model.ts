@@ -1,11 +1,13 @@
 import * as mongoose from "mongoose";
-import { getPreSignedUrl } from "../middleware/s3-file-upload";
+import { getPreSignedUrl } from "../services/s3.service";
 
 export type MediaModel = mongoose.Document & {
   name: string;
   size: number;
   key: string;
   mimetype: string;
+  url?: string;
+  expiringUrl: any;
 };
 
 const mediaSchema = new mongoose.Schema({
@@ -13,7 +15,7 @@ const mediaSchema = new mongoose.Schema({
   size: { type: Number, required: true },
   key: { type: String, required: true },
   mimetype: { type: String, required: true }
-}, { timestamps: true });
+}, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
 
 mediaSchema.methods.expiringUrl = async function(key: string, expires: number, cb: (err: Error, url: string) => {}) {
   try {
