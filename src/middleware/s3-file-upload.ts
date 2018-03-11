@@ -7,8 +7,9 @@ const env = process.env.NODE_ENV;
 const envConfig = config[env];
 const { region, accessKeyId, secretAccessKey, bucket } = envConfig.s3;
 
+const s3 = new S3( { accessKeyId, secretAccessKey, region } );
+
 export const uploadToS3 = (): multer.Instance => {
-  const s3 = new S3( { accessKeyId, secretAccessKey, region } );
 
   return multer({
     storage: multerS3({
@@ -24,3 +25,13 @@ export const uploadToS3 = (): multer.Instance => {
   });
 
 };
+
+export const getPreSignedUrl = (key: string, expires: number): Promise<string> => {
+  return new Promise ((res, rej) => {
+    const params = { Bucket: bucket, Key: key, Expires: expires };
+    s3.getSignedUrl("getObject", params, (err, url) => {
+      if (err) rej(err);
+      res(url);
+    });
+  });
+}
