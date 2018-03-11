@@ -19,3 +19,11 @@ export let create = (req: any, res: Response, next: NextFunction) => {
     });
   }
 };
+
+export const index = (req: any, res: Response, next: NextFunction) => {
+  Media.find({}, (err, files) => {
+    if (err) next(err);
+
+    res.json(files);
+  });
+};

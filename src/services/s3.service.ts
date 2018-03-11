@@ -16,3 +16,13 @@ export const getPreSignedUrl = (key: string, expires: number): Promise<string> =
     });
   });
 };
+
+export const deleteMedia = (key: string): Promise<S3.DeleteObjectOutput> => {
+  return new Promise ((res, rej) => {
+    const params = { Bucket: bucket, Key: key};
+    s3.deleteObject(params, (err, data) => {
+      if (err) rej(err);
+      res(data);
+    });
+  });
+};
