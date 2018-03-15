@@ -25,6 +25,7 @@ const db = mongoose.connect(`${envConfig.db.connect}${envConfig.db.name}`,  {use
     console.log(`MongoDB connection error. Please make sure MongoDB is running. Error:${err}`);
   }
   else {
+    if ( environment === "development") mongoose.set("debug", true);
     console.log("Connected to MongoDB");
   }
 });
