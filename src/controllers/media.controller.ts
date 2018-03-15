@@ -26,3 +26,18 @@ export const index = (req: any, res: Response, next: NextFunction) => {
     res.json(files);
   });
 };
+
+export const show = (req: any, res: Response, next: NextFunction) => {
+  const id = req.params.id;
+  Media.findById(id, (err, doc: MediaModel) => {
+    if (err) next(err);
+    const { id, name, size, mimetype } = doc;
+
+    doc.expiringUrl(doc.key, 3000, (err: null, url: string) => {
+      const file = { url, id, name, size, mimetype };
+      res.json(file);
+    });
+  });
+};
+
+export const destroy = (req: any, res: Response, next: NextFunction) => {};

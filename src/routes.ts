@@ -46,7 +46,11 @@ export function routes(app: Express) {
 
   app.route("/api/media")
     .get(mediaController.index)
-    .post(jwtAuth, uploadToS3().single("photo"), mediaController.create);
+    .post(jwtAuth, roleAuthorization(["editor", "admin"]), uploadToS3().single("photo"), mediaController.create);
+
+  app.route("/api/media/:id")
+    .get(mediaController.show)
+    .delete(jwtAuth, roleAuthorization(["editor", "admin"]), mediaController.destroy);
 
   app.post("/api/comment", commentController.create );
 
