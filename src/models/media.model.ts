@@ -14,7 +14,10 @@ const mediaSchema = new mongoose.Schema({
   name: { type: String, required: true },
   size: { type: Number, required: true },
   key: { type: String, required: true },
-  mimetype: { type: String, required: true }
+  mimetype: { type: String, required: true },
+  thumbnailKey: { type: String },
+  smallKey: { type: String },
+  mediumKey: { type: String }
 }, { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } });
 
 mediaSchema.methods.expiringUrl = async function(key: string, expires: number, cb: (err: Error, url: string) => {}) {

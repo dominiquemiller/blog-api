@@ -45,6 +45,12 @@ const test = {
  db: {
    name: process.env.TEST_DB_NAME,
    connect: process.env.MONGO_URI_TEST
+ },
+ s3: {
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECTRET_KEY,
+  region: process.env.REGION,
+  bucket: process.env.DEV_BUCKET_NAME
  }
 };
 const production = {
