@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from "express";
 import * as boom from "boom";
 import { Media, MediaModel } from "../models/media.model";
 import * as s3Service from "../services/s3.service";
+import { job } from "../services/delayed-jobs.service";
 
 export let create = (req: any, res: Response, next: NextFunction) => {
   if (req.file) {
@@ -13,6 +14,10 @@ export let create = (req: any, res: Response, next: NextFunction) => {
       const { name, id } = media;
       media.expiringUrl(media.key, 3000, (err: null, url: string) => {
         const doc = { url, name, id };
+
+        // background job to create media asset sizes
+        job.media(doc);
+
         res.json(doc);
       });
 
