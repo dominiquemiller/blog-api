@@ -1,5 +1,7 @@
 import { S3 } from "aws-sdk";
 import { config } from "../config";
+import * as fs from "fs";
+import * as bcrypt from "bcrypt-nodejs";
 
 const env = process.env.NODE_ENV;
 const envConfig = config[env];
@@ -24,5 +26,33 @@ export const deleteMedia = (key: string): Promise<S3.DeleteObjectOutput> => {
       if (err) rej(err);
       res(data);
     });
+  });
+};
+
+function base64Encode(filePath: string) {
+  const bitmap = fs.readFileSync(filePath);
+  return new Buffer(bitmap).toString("base64");
+}
+
+function createKey(fileName: string) {
+  return bcrypt.hashSync(fileName);
+}
+
+export const uploadMedia = (file: string, imageType: string) => {
+  const fileName = `temp/${file}`;
+  const base64Data = base64Encode(fileName);
+  const key = createKey(file);
+
+  const params = {
+    Bucket: bucket,
+    Key: key,
+    Body: base64Data,
+    ACL: "private",
+    ContentEncoding: "base64",
+    ContentType: "image/jpg"
+  };
+
+  s3.upload(params, (err: Error, data: any) => {
+    // handle callbak
   });
 };
