@@ -23,9 +23,8 @@ function resizeImage(data: any) {
 
 queue.process("resizeImage", 1, async (job, done) => {
     const mediaService = MediaSizes.getInstance();
-    const key = await mediaService.process(job.data);
-    // do work here
-    done();
+    const resized = await mediaService.process(job.data);
+    if (resized) done();
 });
 
 // add more types of jobs to this object
