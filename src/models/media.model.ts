@@ -8,6 +8,7 @@ export type MediaModel = mongoose.Document & {
   mimetype: string;
   url?: string;
   expiringUrl: any;
+  [key: string]: any;
 };
 
 const mediaSchema = new mongoose.Schema({
