@@ -16,6 +16,7 @@ interface Environment {
   app: { port: string | number, mandrill: string, morgan: string };
   db: { name: string, connect: string };
   s3?: { accessKeyId: string, secretAccessKey: string, region: string, bucket: string };
+  redis: { connect: string };
 }
 
 
@@ -34,6 +35,9 @@ const development = {
    secretAccessKey: process.env.AWS_SECTRET_KEY,
    region: process.env.REGION,
    bucket: process.env.DEV_BUCKET_NAME
+ },
+ redis: {
+  connect: process.env.REDIS_URL
  }
 };
 const test = {
@@ -45,6 +49,15 @@ const test = {
  db: {
    name: process.env.TEST_DB_NAME,
    connect: process.env.MONGO_URI_TEST
+ },
+ s3: {
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECTRET_KEY,
+  region: process.env.REGION,
+  bucket: process.env.DEV_BUCKET_NAME
+ },
+ redis: {
+  connect: process.env.REDIS_URL_TEST
  }
 };
 const production = {
@@ -62,6 +75,9 @@ const production = {
     secretAccessKey: process.env.AWS_SECTRET_KEY,
     region: process.env.REGION,
     bucket: process.env.PROD_BUCKET_NAME
+  },
+  redis: {
+    connect: process.env.REDISTOGO_URL
   }
 };
 
