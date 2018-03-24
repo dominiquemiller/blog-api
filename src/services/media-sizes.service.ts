@@ -57,7 +57,8 @@ export class MediaSizes {
     }
 
     const keys: Keys = { thumbnailKey, smallKey, mediumKey };
-    const updateMedia  = this.updateMedia(doc.id, keys);
+
+    const updateMedia  = await this.updateMedia(doc.id, keys);
 
     return updateMedia;
   }
@@ -84,6 +85,7 @@ export class MediaSizes {
           const newKey = `${doc.key}_thumbnail`;
           const fileName = `${doc.name}_thumbnail.jpg`;
           const upload = await uploadMedia(fileName, newKey);
+
           // remove temp file
           fs.unlinkSync(`temp/${fileName}`);
           res(upload);
@@ -136,9 +138,8 @@ export class MediaSizes {
   // update media asset with new keys
   updateMedia(id: string, updatedKeys: Keys ) {
     return new Promise<any>( (res, rej) => {
-      Media.findByIdAndUpdate( id, updatedKeys, (err: any, doc) => {
+      Media.findByIdAndUpdate( id, updatedKeys, {new: true}, (err: any, doc) => {
         if (err) console.log(err);
-        console.log(doc);
         res(doc);
       });
     });
