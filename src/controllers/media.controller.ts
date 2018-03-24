@@ -57,16 +57,12 @@ export const show = (req: Request, res: Response, next: NextFunction) => {
 export const destroy = (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
 
-  function deleteRecord(id: string) {
-    Media.findOneAndRemove({ id }, (err, response) => {
-      if (err) next(err);
-      res.json(response);
+    Media.findByIdAndRemove( id, async (err, doc: MediaModel) => {
+      if (err || doc === null) next(err || boom.badRequest("document not found"));
+
+      const deleteAsset = await s3Service.deleteMedia(doc.key);
+
+      res.json(doc);
     });
-  }
 
-  Media.findById(id, "key", async (err, doc: MediaModel) => {
-    const deleteAsset = await s3Service.deleteMedia(doc.key);
-
-    deleteRecord(id);
-  });
 };
