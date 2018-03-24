@@ -4,12 +4,14 @@ import { users } from "../fixtures/users.fixture";
 import { posts } from "../fixtures/posts.fixture";
 import { categories } from "../fixtures/categories.fixture";
 import { tags } from "../fixtures/tags.fixtures";
+import { media } from "../fixtures/media.fixture";
 
 // models
 import { default as User, UserModel } from "../../src/models/user.model";
 import { default as Post, PostModel } from "../../src/models/post.model";
 import { Category, CategoryModel } from "../../src/models/category.model";
 import { Tag, TagModel } from "../../src/models/tag.model";
+import { Media, MediaModel } from "../../src/models/media.model";
 
 export interface ModelSeed {
   name: mongoose.Model<any>;
@@ -27,8 +29,11 @@ export interface Collections {
 const models: Models = { "Users": { name: User, data: users },
                          "Posts": { name: Post, data: [] },
                          "Categories": { name: Category, data: categories },
-                         "Tags": { name: Tag, data: tags } };
+                         "Tags": { name: Tag, data: tags },
+                         "Media": { name: Media, data: media }
+                        };
 
+// clear all data in DB
 export const dropDB = (collections: Collections): void => {
   for (const key in collections) {
     const value = collections[key];
@@ -39,11 +44,11 @@ export const dropDB = (collections: Collections): void => {
 
 // populates collection and returns last document created
 export const seedModel = (name: string) => {
-  return new Promise<UserModel>( (res, rej) => {
+  return new Promise<any>( (res, rej) => {
     models[name].data.forEach( (item, index) => {
       const count = index + 1;
       const length = models[name].data.length;
-      models[name].name.create(item, (err, doc: UserModel) => {
+      models[name].name.create(item, (err, doc: any) => {
         if (count === length) {
           res(doc);
         }
@@ -52,6 +57,7 @@ export const seedModel = (name: string) => {
   });
 };
 
+// seed posts with categories and / or tags
 export const seedPosts = (userId: string, catIds: string[] = [], tagIds: string[] = []) => {
   return new Promise( (res, rej) => {
 
@@ -70,6 +76,7 @@ export const seedPosts = (userId: string, catIds: string[] = [], tagIds: string[
   });
 };
 
+// get an array of IDS to populate another model
 export function idArray(key: string): Promise<string[]> {
   return new Promise( (res, rej) => {
     const ids: string[] = [];
@@ -90,6 +97,7 @@ export function idArray(key: string): Promise<string[]> {
   });
 }
 
+// get one post
 export const getAPost = () => {
   return new Promise<PostModel>( (res, rej) => {
     Post.findOne({}, (err: any, doc: PostModel) => {
