@@ -16,6 +16,8 @@ export const jwtOptions: JwtOptions  = {
 };
 
 export const strategy = new JwtStrategy(jwtOptions, (jwtPayload, done) => {
+  if (!jwtPayload) done(null, false);
+
   User.findById(jwtPayload.id)
       .exec( (err, user) => {
         if (err) return done(null, false);
