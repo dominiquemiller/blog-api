@@ -38,7 +38,7 @@ export const dropDB = (collections: Collections): void => {
   for (const key in collections) {
     const value = collections[key];
     const model = models[value].name;
-    model.collection.drop().then( (data) => { console.log("dropDb", data); } );
+    model.collection.drop().then( (data) => { console.log("dropDb", value); } );
   }
 };
 
